@@ -1,5 +1,8 @@
+#include <iostream>
 #include "Graph.h"
+#include "LinkedBagDs/LinkedBag.h"
 
+using namespace std; 
 // Constructor
 template <typename T>
 Graph<T>::Graph(int vertices, bool directed)
@@ -10,9 +13,14 @@ Graph<T>::Graph(int vertices, bool directed)
 // Add an edge
 template <typename T>
 void Graph<T>::addEdge(int u, int v, T weight) {
-    adjList[u].push_back({v, weight});
-    if (!directed) {
-        adjList[v].push_back({u, weight});
+    if (u != v) {
+        adjList[u].append({v, weight});
+        if (!directed) {
+            adjList[v].append({u, weight});
+        }
+    }
+    else {
+        cout << "This graph does not allow self edges.";
     }
 }
 
@@ -27,8 +35,9 @@ template <typename T>
 void Graph<T>::printGraph() const {
     for (int i = 0; i < V; ++i) {
         cout << "Vertex " << i << ": ";
-        for (const auto& neighbor : adjList[i]) {
-            cout << "(" << neighbor.first << ", " << neighbor.second << ") ";
+        vector<pair<int, T>> temp = adjList[i].toVector();
+        for (auto it = temp.begin(); it != temp.end(); ++it) {
+            cout << "(" << it->first << ", " << it->second << ") ";
         }
         cout << endl;
     }
@@ -36,7 +45,7 @@ void Graph<T>::printGraph() const {
 
 // Get neighbors of a vertex
 template <typename T>
-const list<pair<int, T>>& Graph<T>::getNeighbors(int vertex) const {
+const LinkedBag<pair<int, T>>& Graph<T>::getNeighbors(int vertex) const {
     return adjList[vertex];
 }
 
