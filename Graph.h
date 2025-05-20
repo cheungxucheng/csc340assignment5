@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <vector>
-#include <list>
+// #include <list>
 #include <utility>  // For std::pair
 
-#include "LinkedBagDs/LinkedBag.h"
+#include "LinkedBagDs/LinkedBag.h" // for LinkedBag implementation
+#include "Product.h" // for printing product info from DFT functions
 
 using namespace std;
 
@@ -30,8 +31,8 @@ public:
     const LinkedBag<pair<int, T>>& getNeighbors(int vertex) const;
 
     // Depth First Traversal
-    void DFT(int start) const;
-    void DFTRecursive(int v, vector<bool>& visited) const;
+    void DFT(int start, vector<Product>& productInfo) const;
+    void DFTRecursive(int v, vector<bool>& visited, vector<Product>& productInfo) const;
 
     // -----------------------------------------------------
     // Depth First Search (by username)

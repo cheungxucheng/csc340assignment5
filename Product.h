@@ -37,5 +37,6 @@
 			// Friend function to overload << operator
 			friend std::ostream& operator<<(std::ostream& os, const Product& product);
 	};
-
+	// include the implementation of template functions
+	#include "Product.cpp"
 #endif 

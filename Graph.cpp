@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Graph.h"
+#include "Product.h"
 #include "LinkedBagDs/LinkedBag.h"
 
 using namespace std; 
@@ -13,7 +14,7 @@ Graph<T>::Graph(int vertices, bool directed)
 // Add an edge
 template <typename T>
 void Graph<T>::addEdge(int u, int v, T weight) {
-    if (u != v) {
+    if (u != v) { // if the vertices are not the same (a loop)
         adjList[u].append({v, weight});
         if (!directed) {
             adjList[v].append({u, weight});
@@ -35,8 +36,8 @@ template <typename T>
 void Graph<T>::printGraph() const {
     for (int i = 0; i < V; ++i) {
         cout << "Vertex " << i << ": ";
-        vector<pair<int, T>> temp = adjList[i].toVector();
-        for (auto it = temp.begin(); it != temp.end(); ++it) {
+        vector<pair<int, T>> temp = adjList[i].toVector(); // convert the linkedbag to a vector for iterating
+        for (auto it = temp.begin(); it != temp.end(); ++it) { // uses an iterator to traverse the list
             cout << "(" << it->first << ", " << it->second << ") ";
         }
         cout << endl;
@@ -52,22 +53,23 @@ const LinkedBag<pair<int, T>>& Graph<T>::getNeighbors(int vertex) const {
 
 // DFS Traversal (Recursive approach)
 template <typename T>
-void Graph<T>::DFT(int start) const {
+void Graph<T>::DFT(int start, vector<Product>& productInfo) const {
     vector<bool> visited(V, false); // To keep track of visited vertices
-    DFTRecursive(start, visited);
+    DFTRecursive(start, visited, productInfo);
     cout << endl;
 }
 
 // Utility function for DFS (Recursive)
 template <typename T>
-void Graph<T>::DFTRecursive(int v, vector<bool>& visited) const {
+void Graph<T>::DFTRecursive(int v, vector<bool>& visited, vector<Product>& productInfo) const {
     visited[v] = true;
-    cout << v << " "; // Visit the current vertex
+    cout << productInfo[v] << "\n"; // Visit the current vertex
 
     // Recur for all the vertices adjacent to this vertex
-    for (const auto& neighbor : adjList[v]) {
-        if (!visited[neighbor.first]) {
-            DFTRecursive(neighbor.first, visited);
+    vector<pair<int, T>> temp = adjList[v].toVector(); // convert the linkedbag to a vector for iterating
+    for (auto it = temp.begin(); it != temp.end(); ++it) {
+        if (!visited[it->first]) {
+            DFTRecursive(it->first, visited, productInfo);
         }
     }
 }
